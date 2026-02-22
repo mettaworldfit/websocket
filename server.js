@@ -18,10 +18,10 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', ws => {
-    console.log('🟢 POS conectado');
+    console.log('🟢 Websocket conectado');
 
     ws.on('close', () => {
-        console.log('🔴 POS desconectado');
+        console.log('🔴 Websocket desconectado');
     });
 });
 
@@ -40,9 +40,13 @@ function broadcast(data) {
    ROUTES
 ================================ */
 const posRoutes = require('./routes/pos.routes')(broadcast);
+const reportRoutes = require('./routes/report.routes')(broadcast);
+const homeRoutes = require('./routes/home.routes')(broadcast);
  
-// Punto de venta
-app.use('/api', authToken, posRoutes);
+
+app.use('/api', authToken, posRoutes); // Punto de venta
+app.use('/api', authToken, reportRoutes); // Reportes
+app.use('/api', authToken, homeRoutes); // Inicio
 
 /* ===============================
    HEALTH
@@ -57,5 +61,5 @@ app.get('/health', (req, res) => {
 const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
-    console.log(`✅ Websocket + API activo en ${PORT}`);
+    console.log(`✅ Websocket activo en ${PORT}`);
 });

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = function (broadcast) {
-    
+
     // Actualizar detalle 
     router.post('/detail/update', (req, res) => {
         broadcast({
@@ -20,6 +20,16 @@ module.exports = function (broadcast) {
         });
         res.json({ ok: true });
     });
+
+    // Actualizar lista de precio
+    router.post('/list/update', (req, res) => {
+        broadcast({
+            type: 'precio_lista',
+            list_id: req.body.list_id || null
+        });
+        res.json({ ok: true });
+    });
+
 
     return router;
 };
